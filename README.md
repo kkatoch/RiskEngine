@@ -3,9 +3,13 @@ Mercury Code Challenge.
 
 The goal of this code challenge is to build a prototype risk engine. The risk engine:
 ●	Initializes from a data set containing spendable balances for a fixed set of tokens for each user.
+
 ●	Provides a synchronous WithdrawBalance API that checks if a user has sufficient balance of a token - the requested_quantity and token
+
 ●	If the user does not have sufficient balance the API returns INSUFFICIENT_BALANCE
+
 ●	If the user has sufficient balance the API:
+
 ○	Decrements the user’s spendable balance of the token by the requested_amount
 ○	Returns SUFFICIENT_BALANCE
 ●	Once the trade has settled the risk engine receives a Kafka message containing the actual amounts of the bought and sold tokens - bought_token, bought_quantity, sold_token, sold_quantity. Note - the sold_quantity is likely to be different to the requested_quantity. Upon receiving this message the risk engine:
