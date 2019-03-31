@@ -1,4 +1,4 @@
-package com.blockchain.riskengine;
+package com.blockchain.riskengine.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

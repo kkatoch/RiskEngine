@@ -1,4 +1,4 @@
-package com.blockchain.riskengine;
+package com.blockchain.riskengine.security;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
