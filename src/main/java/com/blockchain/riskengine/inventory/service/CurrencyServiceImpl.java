@@ -26,7 +26,6 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     @Transactional
     public CurrencyEntity addCurrency(CurrencyEntity currency) {
-        //currency.setId(currencyRepo.getNextSeriesId().intValue());
         return currencyRepo.save(currency);
     }
 
