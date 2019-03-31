@@ -11,6 +11,18 @@ public class CurrencyEntity {
     private String currencyCode;
     private String currencyName;
 
+    private double currencyAmount;
+
+    @Basic
+    @Column(name = "currency_amount")
+    public double getCurrencyAmount() {
+        return currencyAmount;
+    }
+
+    public void setCurrencyAmount(double currencyAmount) {
+        this.currencyAmount = currencyAmount;
+    }
+
     public int getId() {
         return id;
     }
@@ -58,12 +70,13 @@ public class CurrencyEntity {
         return id == that.id &&
                 Objects.equals(userId, that.userId) &&
                 Objects.equals(currencyCode, that.currencyCode) &&
-                Objects.equals(currencyName, that.currencyName);
+                Objects.equals(currencyName, that.currencyName) &&
+                Objects.equals(currencyAmount, that.currencyAmount);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, userId, currencyCode, currencyName);
+        return Objects.hash(id, userId, currencyCode, currencyName, currencyAmount);
     }
 }
