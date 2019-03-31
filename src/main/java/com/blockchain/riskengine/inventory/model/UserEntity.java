@@ -9,19 +9,18 @@ import java.util.Objects;
 @RestResource
 @Table(name = "user", schema = "public", catalog = "riskdata")
 public class UserEntity {
-    private int id;
+
     private String userName;
 
 
-    @Id
-    @Column(name = "id")
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
+    private int id;
 
     @Basic
     @Column(name = "user_name")

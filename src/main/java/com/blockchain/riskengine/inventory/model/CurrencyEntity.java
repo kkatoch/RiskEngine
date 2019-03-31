@@ -6,20 +6,19 @@ import java.util.Objects;
 @Entity
 @Table(name = "currency", schema = "public", catalog = "riskdata")
 public class CurrencyEntity {
-    private int id;
+
     private String userId;
     private String currencyCode;
     private String currencyName;
 
-    @Id
-    @Column(name = "id")
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
+    private int id;
 
     @Basic
     @Column(name = "user_id")

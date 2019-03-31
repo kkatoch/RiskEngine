@@ -17,7 +17,17 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserEntity addUser(UserEntity user) {
-        user.setId(userRepo.getNextSeriesId().intValue());
         return userRepo.save(user);
+    }
+
+    @Override
+    public boolean userExists(int userId) {
+        List<UserEntity> allUsers = getAllUsers();
+        for (UserEntity user : allUsers) {
+            if (user.getId() == userId) {
+                return true;
+            }
+        }
+        return false;
     }
 }

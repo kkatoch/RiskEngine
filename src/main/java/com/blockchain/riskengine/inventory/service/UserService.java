@@ -8,4 +8,6 @@ public interface UserService {
     List<UserEntity> getAllUsers();
 
     UserEntity addUser(UserEntity user);
+
+    boolean userExists(int userId);
 }
