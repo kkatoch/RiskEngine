@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.awt.print.Pageable;
 
 public interface CurrencyRepo extends JpaRepository<CurrencyEntity, Integer> {
-    CurrencyEntity findAllByUserNameIsLike(String name);
+    CurrencyEntity findAllByCurrencyNameIsLike(String name);
 
-    CurrencyEntity getAllByUserName(Pageable pageable);
+    CurrencyEntity getAllByCurrencyName(Pageable pageable);
 
     CurrencyEntity findById(int id);
 

@@ -16,7 +16,7 @@ public class CurrencyServiceImpl implements CurrencyService {
     CurrencyRepo currencyRepo;
 
     public CurrencyEntity findAllByCurrencyNameIsLike(String name) {
-        return currencyRepo.findAllByUserNameIsLike(name);
+        return currencyRepo.findAllByCurrencyNameIsLike(name);
     }
 
     public Page<CurrencyEntity> getAllByCurrencyName(int page, int size, String sort) {
