@@ -1,4 +1,4 @@
-package com.blockchain.riskengine.model;
+package com.blockchain.riskengine.inventory.model;
 
 import javax.persistence.*;
 import java.util.Objects;
