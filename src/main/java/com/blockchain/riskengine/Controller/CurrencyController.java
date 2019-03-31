@@ -94,6 +94,7 @@ public class CurrencyController {
         }
         return new ResponseEntity<CurrencyEntity>(currency, HttpStatus.OK);
     }
+
 /*
     @PostMapping(value = "", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public ResponseEntity<?> addCurrency(@RequestBody CurrencyEntity currencyEntity){

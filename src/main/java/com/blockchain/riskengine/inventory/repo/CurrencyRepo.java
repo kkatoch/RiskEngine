@@ -11,7 +11,4 @@ public interface CurrencyRepo extends JpaRepository<CurrencyEntity, Integer> {
     CurrencyEntity getAllByCurrencyName(Pageable pageable);
 
     CurrencyEntity findById(int id);
-
-//    @Query(value = "SELECT nextval('currency_id_seq')", nativeQuery = true)
-    //  Long getNextSeriesId();
 }

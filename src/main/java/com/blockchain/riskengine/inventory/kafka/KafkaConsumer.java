@@ -55,6 +55,10 @@ public class KafkaConsumer {
         return currencyEntityFromKafka;
     }
 
+    public CurrencyEntity getCurrencyEntityFromKafka(String currencyCode) {
+        return currencyEntityFromKafka;
+    }
+
     @KafkaListener(topics = "4igc0qsg-inventories.kafka.patch.currency", groupId = "riskdata")
     public void processPatchCurrency(String currencyJSON) {
         logger.info("received content = '{}'", currencyJSON);
