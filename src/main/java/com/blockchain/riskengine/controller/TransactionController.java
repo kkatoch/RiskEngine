@@ -38,16 +38,17 @@ public class TransactionController {
 
     @GetMapping(value = "/{userId}/{currencyCode}/{amount}")
     public ResponseEntity<?> withdrawCurrency(@PathVariable("userId") String userId, @PathVariable("currencyCode") String currencyCode, @PathVariable("amount") double amount) {
-        logger.info("Withdraw {}", amount);
+        logger.info("Request to Withdraw {} {} received", amount, currencyCode);
         try {
             transactionService.withdraw(userId, currencyCode, amount);
         } catch (TransactionException e) {
+            logger.error("An error occurred! {}", e.getMessage());
             return ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
+                    .status(HttpStatus.BAD_REQUEST)
                     .body(e.getMessage());
         }
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body("Complete");
+                .body("Success! Withdrawal Complete");
     }
 }

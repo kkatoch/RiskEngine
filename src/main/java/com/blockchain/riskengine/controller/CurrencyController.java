@@ -120,11 +120,11 @@ public class CurrencyController {
     public ResponseEntity<?> addCurrencyKafka(@RequestBody CurrencyEntity currencyEntity) {
         logger.info(("Process add new currency"));
         Resources<CustomMessage> res = null;
-        if (checkIFCurrencyUserExists(currencyEntity.getUserId())) {
-            logger.error("An error occurred! User ID {} does not exist", currencyEntity.getUserId());
+        if (checkIFCurrencyUserExists(currencyEntity.getUser())) {
+            logger.error("An error occurred! User ID {} does not exist", currencyEntity.getUser());
             return ResponseEntity
                     .status(HttpStatus.NO_CONTENT)
-                    .body(String.format("User id %s does not exists", currencyEntity.getUserId()));
+                    .body(String.format("User id %s does not exists", currencyEntity.getUser()));
         }
         try {
             kafkaProducer.postCurrency(postCurrencyTopic, kafkaGroupId, currencyEntity);

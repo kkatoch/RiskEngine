@@ -16,8 +16,8 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Autowired
     CurrencyRepo currencyRepo;
 
-    public CurrencyEntity findAllByCurrencyNameIsLike(String name) {
-        return currencyRepo.findAllByCurrencyNameIsLike(name);
+    public CurrencyEntity findAllByNameIsLike(String name) {
+        return currencyRepo.findAllByNameIsLike(name);
     }
 
     public Page<CurrencyEntity> getAllByCurrencyName(int page, int size, String sort) {
@@ -41,5 +41,9 @@ public class CurrencyServiceImpl implements CurrencyService {
 
     public List<CurrencyEntity> getAllCurrencyUserAccounts() {
         return currencyRepo.findAll();
+    }
+
+    public CurrencyEntity findByUserIdAndCurrencyCode(String userId, String currencyCode) {
+        return currencyRepo.findByUserIdAndCurrencyCode(userId, currencyCode);
     }
 }

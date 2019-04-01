@@ -32,7 +32,7 @@ public class KafkaConsumer {
             ObjectMapper mapper = new ObjectMapper();
             CurrencyEntity currencyEntity = mapper.readValue(currencyJSON, CurrencyEntity.class);
             CurrencyEntity currency = currencyService.addCurrency(currencyEntity);
-            logger.info("Success process currency '{}' with topic '{}'", currency.getCurrencyName(), "inventories.kafka.post.currency");
+            logger.info("Success process currency '{}' with topic '{}'", currency.getName(), "inventories.kafka.post.currency");
         } catch (Exception e) {
             logger.error("An error occurred! '{}'", e.getMessage());
         }
@@ -45,7 +45,7 @@ public class KafkaConsumer {
             ObjectMapper mapper = new ObjectMapper();
             CurrencyEntity currency = mapper.readValue(currencyJSON, CurrencyEntity.class);
             currencyEntityFromKafka = currency;
-            logger.info("Success process currency '{}' with topic '{}'", currency.getCurrencyName(), "inventories.kafka.put.currency");
+            logger.info("Success process currency '{}' with topic '{}'", currency.getName(), "inventories.kafka.put.currency");
         } catch (Exception e) {
             logger.error("An error occurred! '{}'", e.getMessage());
         }
@@ -62,7 +62,7 @@ public class KafkaConsumer {
             ObjectMapper mapper = new ObjectMapper();
             CurrencyEntity currencyEntity = mapper.readValue(currencyJSON, CurrencyEntity.class);
             CurrencyEntity currency = currencyService.updateCurrency(currencyEntity);
-            logger.info("Success process currency '{}' with topic '{}'", currency.getCurrencyName(), "inventories.kafka.patch.currency");
+            logger.info("Success process currency '{}' with topic '{}'", currency.getName(), "inventories.kafka.patch.currency");
         } catch (Exception e) {
             logger.error("An error occurred! '{}'", e.getMessage());
         }

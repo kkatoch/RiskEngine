@@ -15,4 +15,6 @@ public interface CurrencyService {
     CurrencyEntity updateCurrency(CurrencyEntity currencyEntity);
 
     List<CurrencyEntity> getAllCurrencyUserAccounts();
+
+    CurrencyEntity findByUserIdAndCurrencyCode(String userId, String currencyCode);
 }

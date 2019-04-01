@@ -7,20 +7,20 @@ import java.util.Objects;
 @Table(name = "currency", schema = "public", catalog = "riskdata")
 public class CurrencyEntity {
 
-    private String userId;
-    private String currencyCode;
-    private String currencyName;
+    private String user;
+    private String code;
+    private String name;
 
-    private double currencyAmount;
+    private double balance;
 
     @Basic
-    @Column(name = "currency_amount")
-    public double getCurrencyAmount() {
-        return currencyAmount;
+    @Column(name = "balance")
+    public double getBalance() {
+        return balance;
     }
 
-    public void setCurrencyAmount(double currencyAmount) {
-        this.currencyAmount = currencyAmount;
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     public int getId() {
@@ -33,33 +33,33 @@ public class CurrencyEntity {
     private int id;
 
     @Basic
-    @Column(name = "user_id")
-    public String getUserId() {
-        return userId;
+    @Column(name = "user")
+    public String getUser() {
+        return user;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    @Basic
-    @Column(name = "currency_code")
-    public String getCurrencyCode() {
-        return currencyCode;
-    }
-
-    public void setCurrencyCode(String currencyCode) {
-        this.currencyCode = currencyCode;
+    public void setUser(String user) {
+        this.user = user;
     }
 
     @Basic
-    @Column(name = "currency_name")
-    public String getCurrencyName() {
-        return currencyName;
+    @Column(name = "code")
+    public String getCode() {
+        return code;
     }
 
-    public void setCurrencyName(String currencyName) {
-        this.currencyName = currencyName;
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    @Basic
+    @Column(name = "name")
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -68,15 +68,15 @@ public class CurrencyEntity {
         if (o == null || getClass() != o.getClass()) return false;
         CurrencyEntity that = (CurrencyEntity) o;
         return id == that.id &&
-                Objects.equals(userId, that.userId) &&
-                Objects.equals(currencyCode, that.currencyCode) &&
-                Objects.equals(currencyName, that.currencyName) &&
-                Objects.equals(currencyAmount, that.currencyAmount);
+                Objects.equals(user, that.user) &&
+                Objects.equals(code, that.code) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(balance, that.balance);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, userId, currencyCode, currencyName, currencyAmount);
+        return Objects.hash(id, user, code, name, balance);
     }
 }

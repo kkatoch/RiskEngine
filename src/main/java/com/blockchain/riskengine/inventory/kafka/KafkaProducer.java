@@ -18,7 +18,7 @@ public class KafkaProducer {
 
     public void postCurrency(String topic, String groupId, CurrencyEntity currency) {
         try {
-            logger.info("Sending data to kafka = '{}' with topic '{}'", currency.getCurrencyName(), topic);
+            logger.info("Sending data to kafka = '{}' with topic '{}'", currency.getName(), topic);
             ObjectMapper mapper = new ObjectMapper();
             kafkaTemplate.send(topic, groupId, mapper.writeValueAsString(currency));
         } catch (Exception e) {
