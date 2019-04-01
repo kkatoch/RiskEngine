@@ -2,19 +2,23 @@ package com.blockchain.riskengine.controller;
 
 import com.blockchain.riskengine.inventory.kafka.KafkaConsumer;
 import com.blockchain.riskengine.inventory.kafka.KafkaProducer;
+import com.blockchain.riskengine.inventory.model.TradeEntity;
 import com.blockchain.riskengine.inventory.service.CurrencyService;
 import com.blockchain.riskengine.inventory.service.TransactionService;
+import com.blockchain.riskengine.util.CustomMessage;
 import com.blockchain.riskengine.util.TransactionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/transact")
@@ -50,5 +54,24 @@ public class TransactionController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body("Success! Withdrawal Complete");
+    }
+
+
+    @PostMapping(value = "/trade", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public ResponseEntity<?> addCurrency(@RequestBody TradeEntity trade) {
+        logger.info("Request to trade {} {} by user", trade.boughtToken, trade.soldToken, trade.userId);
+        Resources<CustomMessage> res = null;
+        try {
+            transactionService.settlement(trade);
+            List<CustomMessage> customMessageList = new ArrayList<CustomMessage>();
+            customMessageList.add(new CustomMessage("Trade settled", HttpStatus.OK));
+            res = new Resources<>(customMessageList);
+        } catch (Exception e) {
+            logger.error("An error occurred! {}", e.getMessage());
+            return ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(e.getMessage());
+        }
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 }

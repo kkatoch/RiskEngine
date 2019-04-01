@@ -1,6 +1,7 @@
 package com.blockchain.riskengine.inventory.service;
 
 import com.blockchain.riskengine.inventory.model.CurrencyEntity;
+import com.blockchain.riskengine.inventory.model.TradeEntity;
 import com.blockchain.riskengine.util.TransactionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,18 +58,18 @@ public class TransactionServiceImpl implements TransactionService {
         logger.info("Successful! Account {} updated currency {}", userId, currencyCode);
     }
 
-    public void settlement(String userId, String boughtCurrencyCode, double boughtAmount, String soldCurrencyCode, double soldAmount) throws TransactionException {
-        logger.info("Initiating settlement of trade for user {} buying currency {} and selling {}", userId, boughtCurrencyCode, soldCurrencyCode);
+    public void settlement(TradeEntity trade) throws TransactionException {
+        logger.info("Initiating settlement of trade for user {} buying currency {} and selling {}", trade.userId, trade.soldToken, trade.soldQuantity);
         try {
-            withdraw(userId, soldCurrencyCode, soldAmount);
+            withdraw(trade.userId, trade.soldToken, trade.soldQuantity);
         } catch (TransactionException e) {
-            logger.error("Trade settlement failed! Could not withdraw sold currency {} for user {}", soldCurrencyCode, userId);
+            logger.error("Trade settlement failed! Could not withdraw sold currency {} for user {}", trade.soldToken, trade.userId);
             throw new TransactionException(e.getMessage());
         }
         try {
-            addAmount(userId, boughtCurrencyCode, boughtAmount);
+            addAmount(trade.userId, trade.boughtToken, trade.boughtQuantity);
         } catch (TransactionException e) {
-            logger.error("Trade settlement failed! Could not add for user {} newly bought currency {}", userId, boughtCurrencyCode);
+            logger.error("Trade settlement failed! Could not add for user {} newly bought currency {}", trade.userId, trade.boughtToken);
             throw new TransactionException(e.getMessage());
         }
     }
