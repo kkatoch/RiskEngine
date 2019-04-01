@@ -3,6 +3,8 @@ package com.blockchain.riskengine.inventory.service;
 import com.blockchain.riskengine.inventory.model.CurrencyEntity;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface CurrencyService {
     Page<CurrencyEntity> getAllByCurrencyName(int page, int size, String sort);
 
@@ -11,4 +13,6 @@ public interface CurrencyService {
     CurrencyEntity findById(int id);
 
     CurrencyEntity updateCurrency(CurrencyEntity currencyEntity);
+
+    List<CurrencyEntity> getAllCurrencyUserAccounts();
 }

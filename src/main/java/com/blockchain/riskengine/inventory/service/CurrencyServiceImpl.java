@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service("CurrencyService")
 public class CurrencyServiceImpl implements CurrencyService {
@@ -36,5 +37,9 @@ public class CurrencyServiceImpl implements CurrencyService {
     @Transactional
     public CurrencyEntity updateCurrency(CurrencyEntity currencyEntity) {
         return currencyRepo.save(currencyEntity);
+    }
+
+    public List<CurrencyEntity> getAllCurrencyUserAccounts() {
+        return currencyRepo.findAll();
     }
 }

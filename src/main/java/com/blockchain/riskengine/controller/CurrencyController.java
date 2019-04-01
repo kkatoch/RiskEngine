@@ -1,4 +1,4 @@
-package com.blockchain.riskengine.Controller;
+package com.blockchain.riskengine.controller;
 
 import com.blockchain.riskengine.inventory.kafka.KafkaConsumer;
 import com.blockchain.riskengine.inventory.kafka.KafkaProducer;
