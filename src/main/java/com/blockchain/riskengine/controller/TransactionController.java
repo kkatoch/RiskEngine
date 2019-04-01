@@ -67,7 +67,7 @@ public class TransactionController {
         logger.info("Request to trade {} {} by user", trade.boughtToken, trade.soldToken, trade.userId);
         Resources<CustomMessage> res = null;
         try {
-            transactionService.settlement(trade);
+            kafkaProducer.postTrade(postTradeTopic, kafkaGroupId, trade);
             List<CustomMessage> customMessageList = new ArrayList<CustomMessage>();
             customMessageList.add(new CustomMessage("Trade settled", HttpStatus.OK));
             res = new Resources<>(customMessageList);

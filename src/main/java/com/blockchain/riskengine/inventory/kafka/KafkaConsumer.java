@@ -1,8 +1,10 @@
 package com.blockchain.riskengine.inventory.kafka;
 
 import com.blockchain.riskengine.inventory.model.CurrencyEntity;
+import com.blockchain.riskengine.inventory.model.TradeEntity;
 import com.blockchain.riskengine.inventory.model.UserEntity;
 import com.blockchain.riskengine.inventory.service.CurrencyService;
+import com.blockchain.riskengine.inventory.service.TransactionService;
 import com.blockchain.riskengine.inventory.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -22,6 +24,8 @@ public class KafkaConsumer {
     CurrencyService currencyService;
     @Autowired
     UserService userService;
+    @Autowired
+    TransactionService transactionService;
 
     private CurrencyEntity currencyEntityFromKafka = new CurrencyEntity();
 
@@ -76,6 +80,19 @@ public class KafkaConsumer {
             UserEntity userEntity = mapper.readValue(userJSON, UserEntity.class);
             UserEntity user = userService.addUser(userEntity);
             logger.info("Success process currency user '{}' with topic '{}'", user.getUserName(), "inventories.kafka.post.user");
+        } catch (Exception e) {
+            logger.error("An error occurred! '{}'", e.getMessage());
+        }
+    }
+
+    @KafkaListener(topics = "4igc0qsg-inventories.kafka.post.trade", groupId = "riskdata")
+    public void processPostTrade(String tradeJSON) {
+        logger.info("received content = '{}'", tradeJSON);
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            TradeEntity tradeEntity = mapper.readValue(tradeJSON, TradeEntity.class);
+            transactionService.settlement(tradeEntity);
+            logger.info("Success process currency user '{}' with topic '{}'", tradeEntity.getUserId(), "inventories.kafka.post.trade");
         } catch (Exception e) {
             logger.error("An error occurred! '{}'", e.getMessage());
         }
