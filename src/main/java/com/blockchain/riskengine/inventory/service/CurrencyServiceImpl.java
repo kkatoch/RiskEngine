@@ -3,6 +3,7 @@ package com.blockchain.riskengine.inventory.service;
 import com.blockchain.riskengine.inventory.model.CurrencyEntity;
 import com.blockchain.riskengine.inventory.repo.CurrencyRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -43,6 +44,7 @@ public class CurrencyServiceImpl implements CurrencyService {
         return currencyRepo.findAll();
     }
 
+    @CachePut(value = "accounts")
     public CurrencyEntity findByUserIdAndCurrencyCode(String userId, String currencyCode) {
         return currencyRepo.findByUserIdAndCurrencyCode(userId, currencyCode);
     }

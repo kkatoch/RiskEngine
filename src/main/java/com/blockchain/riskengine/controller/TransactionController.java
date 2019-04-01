@@ -7,6 +7,7 @@ import com.blockchain.riskengine.inventory.model.WithdrawStatus;
 import com.blockchain.riskengine.inventory.service.TransactionService;
 import com.blockchain.riskengine.util.CustomMessage;
 import com.blockchain.riskengine.util.TransactionException;
+import net.sf.ehcache.CacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,9 @@ public class TransactionController {
 
     @Value("${inventories.kafka.post.trade}")
     String postTradeTopic;
+
+    @Autowired
+    CacheManager cacheManager;
 
     @GetMapping(value = "/{userId}/{currencyCode}/{amount}")
     public ResponseEntity<?> withdrawCurrency(@PathVariable("userId") String userId, @PathVariable("currencyCode") String currencyCode, @PathVariable("amount") double amount) {

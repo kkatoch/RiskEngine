@@ -15,7 +15,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     CurrencyService currencyService;
 
-    public WithdrawStatus withdraw(String userId, String currencyCode, double amount) throws TransactionException {
+    public synchronized WithdrawStatus withdraw(String userId, String currencyCode, double amount) throws TransactionException {
         logger.info("Initiating withdraw amount for user {} and currency {}", userId, currencyCode);
         CurrencyEntity currencyUserAccount = currencyService.findByUserIdAndCurrencyCode(userId, currencyCode);
 
@@ -43,7 +43,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
 
-    public void addAmount(String userId, String currencyCode, double amount) throws TransactionException {
+    public synchronized void addAmount(String userId, String currencyCode, double amount) throws TransactionException {
         logger.info("Initiating add amount for user {} and currency {}", userId, currencyCode);
         CurrencyEntity currencyUserAccount = currencyService.findByUserIdAndCurrencyCode(userId, currencyCode);
         if (currencyUserAccount == null) {

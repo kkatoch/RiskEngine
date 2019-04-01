@@ -15,4 +15,11 @@
             eternal="false"
             overflowToDisk="false"/>
 
+    <cache
+            name="accounts"
+            maxElementsInMemory="300"
+            timeToLiveSeconds="86400"
+            eternal="false"
+            overflowToDisk="false"/>
+
 </ehcache>
