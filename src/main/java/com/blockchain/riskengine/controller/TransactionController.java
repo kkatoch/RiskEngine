@@ -3,7 +3,7 @@ package com.blockchain.riskengine.controller;
 import com.blockchain.riskengine.inventory.kafka.KafkaConsumer;
 import com.blockchain.riskengine.inventory.kafka.KafkaProducer;
 import com.blockchain.riskengine.inventory.model.TradeEntity;
-import com.blockchain.riskengine.inventory.service.CurrencyService;
+import com.blockchain.riskengine.inventory.model.WithdrawStatus;
 import com.blockchain.riskengine.inventory.service.TransactionService;
 import com.blockchain.riskengine.util.CustomMessage;
 import com.blockchain.riskengine.util.TransactionException;
@@ -28,8 +28,6 @@ public class TransactionController {
 
     @Autowired
     TransactionService transactionService;
-    @Autowired
-    CurrencyService currencyService;
 
     @Autowired
     KafkaProducer kafkaProducer;
@@ -40,11 +38,18 @@ public class TransactionController {
     @Value("${spring.kafka.consumer.group-id}")
     String kafkaGroupId;
 
+    @Value("${inventories.kafka.get.withdrawal}")
+    String getWithdrawalTopic;
+
+    @Value("${inventories.kafka.post.trade}")
+    String postTradeTopic;
+
     @GetMapping(value = "/{userId}/{currencyCode}/{amount}")
     public ResponseEntity<?> withdrawCurrency(@PathVariable("userId") String userId, @PathVariable("currencyCode") String currencyCode, @PathVariable("amount") double amount) {
         logger.info("Request to Withdraw {} {} received", amount, currencyCode);
+        WithdrawStatus status;
         try {
-            transactionService.withdraw(userId, currencyCode, amount);
+            status = transactionService.withdraw(userId, currencyCode, amount);
         } catch (TransactionException e) {
             logger.error("An error occurred! {}", e.getMessage());
             return ResponseEntity
@@ -53,7 +58,7 @@ public class TransactionController {
         }
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body("Success! Withdrawal Complete");
+                .body(status.toString());
     }
 
 

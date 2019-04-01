@@ -2,6 +2,7 @@ package com.blockchain.riskengine.inventory.service;
 
 import com.blockchain.riskengine.inventory.model.CurrencyEntity;
 import com.blockchain.riskengine.inventory.model.TradeEntity;
+import com.blockchain.riskengine.inventory.model.WithdrawStatus;
 import com.blockchain.riskengine.util.TransactionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +15,7 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     CurrencyService currencyService;
 
-    public void withdraw(String userId, String currencyCode, double amount) throws TransactionException {
+    public WithdrawStatus withdraw(String userId, String currencyCode, double amount) throws TransactionException {
         logger.info("Initiating withdraw amount for user {} and currency {}", userId, currencyCode);
         CurrencyEntity currencyUserAccount = currencyService.findByUserIdAndCurrencyCode(userId, currencyCode);
 
@@ -24,20 +25,21 @@ public class TransactionServiceImpl implements TransactionService {
         }
         if (currencyUserAccount.getBalance() < 0) {
             logger.error("An error occurred! Money in the account {} is not enough", userId);
-            throw new TransactionException(String.format("Money in the account %s is not enough ", userId));
+            return WithdrawStatus.INSUFFICIENT_BALANCE;
         }
         if (currencyUserAccount.getBalance() < amount) {
             logger.error("An error occurred! Cannot withdraw more than the balance for the user {}", userId);
-            throw new TransactionException(String.format("Cannot withdraw more than the balance for the user %s ", userId));
+            return WithdrawStatus.INSUFFICIENT_BALANCE;
         }
         double newBalance = currencyUserAccount.getBalance() - amount;
         if (newBalance < 0) {
             logger.error("An error occurred! Balance cannot be negative for user {}", userId);
-            throw new TransactionException(String.format("Cannot withdraw more than the balance for the user %s ", userId));
+            return WithdrawStatus.INSUFFICIENT_BALANCE;
         }
         currencyUserAccount.setBalance(newBalance);
         currencyService.updateCurrency(currencyUserAccount);
         logger.info("Successful! Account {} updated currency {}", userId, currencyCode);
+        return WithdrawStatus.SUFFICIENT_BALANCE;
     }
 
 
