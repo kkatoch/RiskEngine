@@ -34,3 +34,12 @@ API examples
 }
 ~~~~
 3) Other API's are added to get data, post data, update data (These were just created keeping in mind, later might be used by admin user)
+
+References (In no particular order)
+1) https://medium.com/@contactsunny/simple-apache-kafka-producer-and-consumer-using-spring-boot-41be672f4e2b
+2) https://o7planning.org/en/11661/spring-boot-jpa-and-spring-transaction-tutorial
+3) http://www.springboottutorial.com/spring-boot-crud-rest-service-with-jpa-hibernate
+4) https://medium.com/doku-insight/building-skeleton-rest-api-with-spring-boot-kafka-postgres-6c3a14fe08cb
+5) http://www.springboottutorial.com/spring-boot-and-h2-in-memory-database
+6) https://dzone.com/articles/spring-cache-annotation-tips-and-tricks
+7) https://dzone.com/articles/spring-hibernate-ehcache-caching
