@@ -11,6 +11,8 @@ Considerations
 7) The naming of the classes and variables can be improved.
 8) There are places where code could have been abstracted example in Producer where creation of templates could have been hidden.
 9) There are places where interfaces could have been extracted, example for controllers, there could have been interfaces so that we can add different implementations .i.e Kafka implementation/Rest Api Calls directly to services
+10) As required by the spec, the withdrawal api is made synchonous, the API first checks if the user accounts has sufficient balance, and then when verified send request to withdraw for the verified user. Same can be used for trade settlement api as well.
+11) Trade settlement, Check account withdraw and withdraw api uses Kafka topics to communicate with the service and same can be accessed using rest controller (Api examples below)
 
 Tests
 1) Tested the application using Postman tool and debugging.
