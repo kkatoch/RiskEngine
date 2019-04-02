@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service("TransactionService")
 public class TransactionServiceImpl implements TransactionService {
     public static final Logger logger = LoggerFactory.getLogger(TransactionServiceImpl.class);
@@ -40,6 +42,24 @@ public class TransactionServiceImpl implements TransactionService {
         currencyService.updateCurrency(currencyUserAccount);
         logger.info("Successful! Account {} updated currency {}", userId, currencyCode);
         return WithdrawStatus.SUFFICIENT_BALANCE;
+    }
+
+    public synchronized Optional<WithdrawStatus> checkIfUserCanWithdraw(String userId, String currencyCode, double amount) {
+        logger.info("Initiating withdrawal check for for user {} and currency {}", userId, currencyCode);
+        CurrencyEntity currencyUserAccount = currencyService.findByUserIdAndCurrencyCode(userId, currencyCode);
+        if (currencyUserAccount == null) {
+            logger.error("An error occurred! No Account found by user id {} and name {}", userId, currencyCode);
+            return Optional.of(WithdrawStatus.ACCOUNT_NOT_FOUND);
+        }
+        if (currencyUserAccount.getBalance() < 0) {
+            logger.error("An error occurred! Money in the account {} is not enough", userId);
+            return Optional.of(WithdrawStatus.INSUFFICIENT_BALANCE);
+        }
+        if (currencyUserAccount.getBalance() < amount) {
+            logger.error("An error occurred! Cannot withdraw more than the balance for the user {}", userId);
+            return Optional.of(WithdrawStatus.INSUFFICIENT_BALANCE);
+        }
+        return Optional.of(WithdrawStatus.SUFFICIENT_BALANCE);
     }
 
 

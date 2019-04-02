@@ -1,8 +1,10 @@
 package com.blockchain.riskengine.inventory.kafka;
 
+import com.blockchain.riskengine.inventory.event.WithdrawalChecked;
 import com.blockchain.riskengine.inventory.model.CurrencyEntity;
 import com.blockchain.riskengine.inventory.model.TradeEntity;
 import com.blockchain.riskengine.inventory.model.UserEntity;
+import com.blockchain.riskengine.inventory.model.WithdrawEntity;
 import com.blockchain.riskengine.inventory.service.CurrencyService;
 import com.blockchain.riskengine.inventory.service.TransactionService;
 import com.blockchain.riskengine.inventory.service.UserService;
@@ -93,6 +95,30 @@ public class KafkaConsumer {
             TradeEntity tradeEntity = mapper.readValue(tradeJSON, TradeEntity.class);
             transactionService.settlement(tradeEntity);
             logger.info("Success process currency user '{}' with topic '{}'", tradeEntity.getUserId(), "inventories.kafka.post.trade");
+        } catch (Exception e) {
+            logger.error("An error occurred! '{}'", e.getMessage());
+        }
+    }
+
+    @KafkaListener(topics = "inventories.kafka.post.check.account")
+    public void processGetWithdrawal(WithdrawalChecked withdrawalChecked) {
+        logger.info("Received withdrawal Checked event UserId:{}, CurrencyToken: {}", withdrawalChecked.withdraw.getUserId(), withdrawalChecked.withdraw.getCurrencyCode());
+        try {
+            transactionService.withdraw(withdrawalChecked.withdraw.getUserId(), withdrawalChecked.withdraw.getCurrencyCode(), withdrawalChecked.withdraw.getAmount());
+            logger.info("Success process currency user '{}' with topic '{}'", withdrawalChecked.withdraw.getUserId(), "inventories.kafka.get.withdrawal");
+        } catch (Exception e) {
+            logger.error("An error occurred! '{}'", e.getMessage());
+        }
+    }
+
+    @KafkaListener(topics = "inventories.kafka.post.check.account.withdrawal")
+    public void processPostCheckedWithdrawal(String checkedWithdrawJSON) {
+        logger.info("received content = '{}'", checkedWithdrawJSON);
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            WithdrawEntity withdrawalChecked = mapper.readValue(checkedWithdrawJSON, WithdrawEntity.class);
+            transactionService.withdraw(withdrawalChecked.getUserId(), withdrawalChecked.getCurrencyCode(), withdrawalChecked.getAmount());
+            logger.info("Success! process currency user '{}' with topic '{}'", withdrawalChecked.getUserId(), "inventories.kafka.post.check.account.withdrawal");
         } catch (Exception e) {
             logger.error("An error occurred! '{}'", e.getMessage());
         }
