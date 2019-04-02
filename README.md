@@ -21,3 +21,16 @@ Extra things added
 1) Spring boot Actuator to get the health statistics of the application. Doing a get call on /actuator/health shows if the service is UP (Can add significant importance for microservice environment)
 2) Added Lombok for auto generation of getter/setter constructor etc. Chose to use it in the end as I wanted to finish this quickly. Some of the classes need consistency as some use Lombok and some don't.
 3) Authentication added, the service can only be accessed by using credentials (Can be found in app settings). Default user name admin, password admin
+
+API examples
+1) localhost:8080/api/transact/withdraw?userId=100&currencyCode=BTC&amount=1
+2) localhost:8080/api/transact/trade
+~~~~{
+  "user_id": "100",
+  "bought_token": "ETH",
+  "bought_quantity": "87.35",
+  "sold_token": "BTC",
+  "sold_quantity": "6.9"
+}
+~~~~
+3) Other API's are added to get data, post data, update data (These were just created keeping in mind, later might be used by admin user)
