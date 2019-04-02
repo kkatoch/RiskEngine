@@ -1,68 +1,23 @@
 # RiskEngine
-Mercury Code Challenge.
+###### Mercury Code Challenge.
 
-The goal of this code challenge is to build a prototype risk engine. The risk engine:
-●	Initializes from a data set containing spendable balances for a fixed set of tokens for each user.
+Considerations
+1) Used Java Spring boot as preferred choice as the task was to create a linux microservice. I have experience in both Java and C# but since last 10 months, I have been working on creating microservices in C#. With Java I don't have experience creating microservices from scratch as I have mostly worked on matured or legacy application in enterprise environment when working for the Java team in my first rotation. Wanted to challenge myself which was another reason to choose Java.
+2) Used H2 as in-memory DB to to speedup the dev process. Changing to Oracle/Postgres would only require driver and url change in application settings.
+3) Used Ehcache for caching mechanism, the system stores Currency account data as it is used mostly during the lifecycle of all transaction. The cache.xml has all the settings of the cache and we currently store 300 records in the accounts cache but later can be increased with config change.
+4) As the task was required to be completed within a set amount of time, no unit tests were written, though I totally understand this is the wrong approach and some would argue that it speeds up the process but I wanted to finish this quickly and solely relied on extensive debugging and Postman tool for post and get requests.
+5) The database is loaded from data.sql which contains all the data which was provided in the excel file.
+6) The database can be accessed at http://localhost:8080/h2 username sa password 
+7) The naming of the classes and variables can be improved.
+8) There are places where code could have been abstracted example in Producer where creation of templates could have been hidden.
+9) There are places where interfaces could have been extracted, example for controllers, there could have been interfaces so that we can add different implementations .i.e Kafka implementation/Rest Api Calls directly to services
 
-●	Provides a synchronous WithdrawBalance API that checks if a user has sufficient balance of a token - the requested_quantity and token
+Tests
+1) Tested the application using Postman tool and debugging.
+2) Used collection in Postman to add 1138 different requests for Withdrawal using a csv fine (Can be found under resources by the name data-article.csv). The tool allowed to also execute and control iterations. This was especially beneficial in testing the behaviour of the cache as the task suggested to use only 300 records in memory. 
+3) If I had to write this again, I would have added tests to all the services, would have mocked different dependencies to test individual methods without relying on other logic. Would have created integration tests to test the API's.
 
-●	If the user does not have sufficient balance the API returns INSUFFICIENT_BALANCE
-
-●	If the user has sufficient balance the API:
-
-○	Decrements the user’s spendable balance of the token by the requested_amount
-
-○	Returns SUFFICIENT_BALANCE
-
-●	Once the trade has settled the risk engine receives a Kafka message containing the actual amounts of the bought and sold tokens - bought_token, bought_quantity, sold_token, sold_quantity. Note - the sold_quantity is likely to be different to the requested_quantity. Upon receiving this message the risk engine:
-
-○	Modifies the available balance of the sold_token to account for the difference between sold_quantity and the requested_quantity
-
-○	Increments the balance of the bought_token by the bought_quantity
-
-
-For example:
-
-For this user…
-User_Id	Symbol
-
-	USD	EUR	BTC	BCH	ETH
-100	0	3128.39	81.807344	68.653219	136.152897
-
-●	WithdrawBalance( 100, USD, 250 ) will return INSUFFICIENT_BALANCE
-
-●	WithdrawBalance( 100, BTC, 7) will return SUFFICIENT_BALANCE, after modifying the available balances…
-
-	USD	EUR	BTC	BCH	ETH
-100	0	3128.39	74.807344	68.653219	136.152897
-
-●	When the risk engine receives a settlement message…
-{ “user_id”:”100”, 
-“bought_token”:”ETH”, “bought_quantity”:”87.35”, 
-“sold_token”:BTC”, “sold_quantity”:”6.9” }
-
-●	...it modifies the available balances…
-	USD	EUR	BTC	BCH	ETH
-100	0	3128.39	74.907344	68.653219	223.502897
-
-
-Implementation notes:
-
-●	There is a test data set containing available balances for 900 users here. Don’t worry about putting this in a database and loading it - feel free to include this data inline in your test code.
-
-●	This should be implemented as a Linux Microservice that provides a REST API and is a Kafka client.
-
-●	Given the latency requirements on the WithdrawBalance API, I’m assuming that you will keep the table of available balances in RAM. However you should assume that you have insufficient RAM to store balances for all users. In this prototype please store no more than 300 users’ data in RAM. I’m interested in your strategy for deciding which users’ data gets replaced…
-
-●	Feel free to add items (sequence numbers, order ids, etc.) to the APIs as you think fit. Similarly use whatever API/Message/Variable naming scheme you are comfortable with.
-
-●	Use whatever language you feel most comfortable with.
-
-●	I don’t expect this to take too long - if there are parts you don’t get to (unit tests, error conditions, etc.) please describe these.
-
-
-Development resources:
-●	Kafka docker image, and quickstart: https://hub.docker.com/r/confluent/kafka/
-●	Kafka client libraries: https://cwiki.apache.org/confluence/display/KAFKA/Clients
-●	Kafka Server Setup: https://kafka.apache.org/quickstart 
-
+Extra things added
+1) Spring boot Actuator to get the health statistics of the application. Doing a get call on /actuator/health shows if the service is UP (Can add significant importance for microservice environment)
+2) Added Lombok for auto generation of getter/setter constructor etc. Chose to use it in the end as I wanted to finish this quickly. Some of the classes need consistency as some use Lombok and some don't.
+3) Authentication added, the service can only be accessed by using credentials (Can be found in app settings). Default user name admin, password admin
